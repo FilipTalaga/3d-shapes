@@ -33,27 +33,13 @@ const getEntity = () => ({
 
 const entities = new Array(10).fill(0).map(getEntity);
 
-function getReflectionAngle(currentAngle, boundaryOrientation) {
-  let reflectionAngle;
+const getReflectionAngle = (currentAngle, orientation) =>
+  ((orientation === 'horizontal' ? 360 : 180) - currentAngle + 360) % 360;
 
-  if (boundaryOrientation === 'horizontal') {
-    reflectionAngle = (360 - currentAngle) % 360;
-  } else if (boundaryOrientation === 'vertical') {
-    reflectionAngle = (180 - currentAngle) % 360;
-  }
-
-  if (reflectionAngle < 0) {
-    reflectionAngle += 360;
-  }
-
-  return reflectionAngle;
-}
-
-const getOffset = (direction, speed) => {
-  const angle = direction * (Math.PI / 180);
-
-  return { x: speed * Math.cos(angle), y: speed * Math.sin(angle) };
-};
+const getOffset = (direction, speed) => ({
+  x: speed * Math.cos(direction * (Math.PI / 180)),
+  y: speed * Math.sin(direction * (Math.PI / 180)),
+});
 
 const drawEntity = ({ x, y, width, height, color }) => {
   ctx.fillStyle = color;
@@ -96,9 +82,7 @@ const startUpdate = () => {
 
 const startRender = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   render();
-
   requestAnimationFrame(startRender);
 };
 
