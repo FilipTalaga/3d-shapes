@@ -3,14 +3,23 @@ const config = {
   colors: ['red', 'blue', 'green', 'yellow', 'orange', 'purple'],
   entity: {
     size: { min: 50, max: 150 },
-    speed: { min: 1, max: 3 },
+    speed: { min: 1, max: 5 },
+    count: { min: 10, max: 20 },
   },
 };
 
 const canvas = document.getElementById('workspace');
+
 const ctx = canvas.getContext('2d');
 
 let gameEngine;
+
+const updateCanvasSize = () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+};
+
+window.onresize = updateCanvasSize;
 
 const getRandomColor = () => config.colors[Math.floor(Math.random() * config.colors.length)];
 
@@ -31,7 +40,9 @@ const getEntity = () => ({
   direction: getRandomInt(0, 360),
 });
 
-const entities = new Array(10).fill(0).map(getEntity);
+const entities = new Array(getRandomInt(config.entity.count.min, config.entity.count.max))
+  .fill(0)
+  .map(getEntity);
 
 const getReflectionAngle = (currentAngle, orientation) =>
   ((orientation === 'horizontal' ? 360 : 180) - currentAngle + 360) % 360;
@@ -54,13 +65,11 @@ const moveEntity = entity => {
 
   if (newX + entity.width >= canvas.width || newX <= 0) {
     entity.direction = getReflectionAngle(entity.direction, 'vertical');
-    moveEntity(entity);
     return;
   }
 
   if (newY + entity.height >= canvas.height || newY <= 0) {
     entity.direction = getReflectionAngle(entity.direction, 'horizontal');
-    moveEntity(entity);
     return;
   }
 
@@ -88,6 +97,7 @@ const startRender = () => {
 
 /* Initialize */
 window.onload = () => {
+  updateCanvasSize();
   startUpdate();
   startRender();
 };
