@@ -1,10 +1,9 @@
 const config = {
   updateTick: 10,
-  colors: ['red', 'blue', 'green', 'yellow', 'orange', 'purple'],
   entity: {
     size: { min: 50, max: 150 },
     speed: { min: 1, max: 5 },
-    count: { min: 10, max: 20 },
+    count: { min: 20, max: 50 },
   },
 };
 
@@ -21,8 +20,6 @@ const updateCanvasSize = () => {
 
 window.onresize = updateCanvasSize;
 
-const getRandomColor = () => config.colors[Math.floor(Math.random() * config.colors.length)];
-
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -30,19 +27,27 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const getEntity = () => ({
-  x: canvas.width / 2,
-  y: canvas.height / 2,
-  width: getRandomInt(config.entity.size.min, config.entity.size.max),
-  height: getRandomInt(config.entity.size.min, config.entity.size.max),
-  color: getRandomColor(),
-  speed: getRandomInt(config.entity.speed.min, config.entity.speed.max),
-  direction: getRandomInt(0, 360),
-});
+const getEntities = () => {
+  const count = getRandomInt(config.entity.count.min, config.entity.count.max);
+  const hueOffset = getRandomInt(0, 360);
 
-const entities = new Array(getRandomInt(config.entity.count.min, config.entity.count.max))
-  .fill(0)
-  .map(getEntity);
+  return new Array(count).fill(0).map((_, index) => {
+    const width = getRandomInt(config.entity.size.min, config.entity.size.max);
+    const height = getRandomInt(config.entity.size.min, config.entity.size.max);
+
+    return {
+      x: window.innerWidth / 2 - width / 2,
+      y: window.innerHeight / 2 - height / 2,
+      width,
+      height,
+      color: `hsl(${(hueOffset + (360 / count) * index) % 360}, 80%, 50%)`,
+      speed: getRandomInt(config.entity.speed.min, config.entity.speed.max),
+      direction: getRandomInt(0, 360),
+    };
+  });
+};
+
+const entities = getEntities();
 
 const getReflectionAngle = (currentAngle, orientation) =>
   ((orientation === 'horizontal' ? 360 : 180) - currentAngle + 360) % 360;
