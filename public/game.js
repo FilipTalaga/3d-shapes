@@ -1,32 +1,40 @@
 import { gameLoop } from './engine.js';
 import { config } from './config.js';
-import { getPlayer } from './entities.js';
+import { getPlayer, getEntities } from './entities.js';
 import { getRenderer } from './renderer.js';
 
 const player = getPlayer();
 
+const entities = getEntities();
+
 const { gravity, bounce } = config.world;
 
-const update = deltaTime => {
+const fall = (entity, deltaTime) => {
   /* Apply gravity */
-  player.velocity.y += gravity * deltaTime;
+  entity.velocity.y += gravity * deltaTime;
 
   /* Move */
-  player.y += player.velocity.y * deltaTime;
+  entity.y += entity.velocity.y * deltaTime;
 
   /* Leave if in not on the ground */
-  if (player.y + player.height < window.innerHeight) return;
+  if (entity.y + entity.height < window.innerHeight) return;
 
   /* Align with ground if went over */
-  player.y = window.innerHeight - player.height;
+  entity.y = window.innerHeight - entity.height;
 
   /* Change direction to bounce */
-  player.velocity.y *= -bounce;
+  entity.velocity.y *= -bounce;
+};
+
+const update = deltaTime => {
+  fall(player, deltaTime);
+  entities.forEach(entity => fall(entity, deltaTime));
 };
 
 const render = ctx => {
   const { drawEntity } = getRenderer(ctx);
 
+  entities.forEach(drawEntity);
   drawEntity(player);
 };
 
