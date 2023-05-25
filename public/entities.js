@@ -2,37 +2,51 @@ import { getRandomInt, getRandomColor } from './utils.js';
 import { config } from './config.js';
 
 export const getPlayer = () => {
-  const { size } = config.player;
+  const {
+    player: { size },
+    simulation: { velocity },
+  } = config;
 
   const width = getRandomInt(size.min, size.max);
   const height = getRandomInt(width - width * size.ratio, width + width * size.ratio);
 
   return {
     x: window.innerWidth / 2 - width / 2,
-    y: 0 - window.innerHeight,
+    y: window.innerHeight / 2 - height / 2,
     width,
     height,
     color: getRandomColor(),
-    velocity: { y: 0 },
+    velocity: {
+      x: getRandomInt(velocity.x.min, velocity.x.max),
+      y: getRandomInt(velocity.y.min, velocity.y.max),
+    },
+    direction: getRandomInt(0, 1) ? 1 : -1,
   };
 };
 
-export const getEntities = () => {
-  const { count, size } = config.entity;
+export const getNpcs = () => {
+  const {
+    entity: { count, size },
+    simulation: { velocity },
+  } = config;
 
-  const getEntity = () => {
+  const getNpc = () => {
     const width = getRandomInt(size.min, size.max);
     const height = getRandomInt(width - width * size.ratio, width + width * size.ratio);
 
     return {
-      x: getRandomInt(0, window.innerWidth - width),
-      y: getRandomInt(-200, 200),
+      x: window.innerWidth / 2 - width / 2,
+      y: window.innerHeight / 2 - height / 2,
       width,
       height,
       color: getRandomColor({ l: 0.7 }),
-      velocity: { y: 0 },
+      velocity: {
+        x: getRandomInt(velocity.x.min, velocity.x.max),
+        y: getRandomInt(velocity.y.min, velocity.y.max),
+      },
+      direction: getRandomInt(0, 1) ? 1 : -1,
     };
   };
 
-  return new Array(getRandomInt(count.min, count.max)).fill().map(getEntity);
+  return new Array(getRandomInt(count.min, count.max)).fill().map(getNpc);
 };
