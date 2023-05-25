@@ -1,11 +1,13 @@
-export const gameLoop = (update, render) => {
+export const gameLoop = (update, render, reset) => {
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
 
   let requestId;
+  let isPaused = false;
   let lastTime = 0;
 
   const updateCanvasSize = () => {
+    reset();
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   };
@@ -21,15 +23,29 @@ export const gameLoop = (update, render) => {
     requestId = requestAnimationFrame(tick);
   };
 
+  const pause = () => {
+    if (document.visibilityState === 'hidden' && !isPaused) {
+      isPaused = true;
+      cancelAnimationFrame(requestId);
+      return;
+    }
+
+    isPaused = false;
+    lastTime = performance.now();
+    requestId = requestAnimationFrame(tick);
+  };
+
   const start = () => {
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
+    window.addEventListener('visibilitychange', pause);
     requestId = requestAnimationFrame(tick);
   };
 
   const stop = () => {
     cancelAnimationFrame(requestId);
     window.removeEventListener('resize', updateCanvasSize);
+    window.removeEventListener('visibilitychange', pause);
   };
 
   return { start, stop };
