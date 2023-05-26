@@ -9,6 +9,7 @@ export const config = {
     gravity: 6000,
     bounce: 0.6,
     friction: 6000,
+    airResistance: 1000,
   },
   player: {
     size: {

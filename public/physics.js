@@ -1,6 +1,6 @@
 import { config } from './config.js';
 
-const { gravity, friction, bounce } = config.world;
+const { gravity, friction, bounce, airResistance } = config.world;
 
 export const getPhysics = (deltaTime, obstacles) => {
   const collides = (entity, obstacle) =>
@@ -9,11 +9,13 @@ export const getPhysics = (deltaTime, obstacles) => {
     entity.y < obstacle.y + obstacle.height &&
     entity.y + entity.height > obstacle.y;
 
-  const applyFricion = entity => {
-    if (entity.velocity.x === 0) return;
+  const applyGravity = entity => (entity.velocity.y += gravity * deltaTime);
 
-    entity.velocity.x = entity.velocity.x <= 0 ? 0 : entity.velocity.x - friction * deltaTime;
-  };
+  const applyFricion = entity =>
+    (entity.velocity.x = Math.max(entity.velocity.x - friction * deltaTime, 0));
+
+  const applyAirResistance = entity =>
+    (entity.velocity.x = Math.max(entity.velocity.x - airResistance * deltaTime, 0));
 
   const bounceHorizontally = entity => (entity.direction *= -bounce);
 
@@ -21,13 +23,9 @@ export const getPhysics = (deltaTime, obstacles) => {
 
   const moveVertically = entity => {
     /*********************************************************/
-    /* Apply gravity                                         */
-    /*********************************************************/
-    entity.velocity.y += gravity * deltaTime;
-
-    /*********************************************************/
     /* Move vertically                                       */
     /*********************************************************/
+    applyGravity(entity);
     entity.y += entity.velocity.y * deltaTime;
 
     /*********************************************************/
@@ -64,6 +62,7 @@ export const getPhysics = (deltaTime, obstacles) => {
     /*********************************************************/
     /* Move horizontally                                     */
     /*********************************************************/
+    applyAirResistance(entity);
     entity.x += entity.velocity.x * entity.direction * deltaTime;
 
     /*********************************************************/
