@@ -1,23 +1,25 @@
 import { gameLoop } from './engine.js';
-import { getPlayer, getNpcs } from './entities.js';
+import { getPlayer, getNpcs, getObstacles } from './entities.js';
 import { getRenderer } from './renderer.js';
 import { getPhysics } from './physics.js';
 
-let entities;
+let entities, obstacles;
 
 const reset = () => {
   const player = getPlayer();
   const npcs = getNpcs();
   entities = [...npcs, player];
+  obstacles = getObstacles();
 };
 
 const update = deltaTime => {
-  const { move } = getPhysics(deltaTime);
+  const { move } = getPhysics(deltaTime, obstacles);
   entities.forEach(move);
 };
 
 const render = ctx => {
   const { draw } = getRenderer(ctx);
+  obstacles.forEach(draw);
   entities.forEach(draw);
 };
 

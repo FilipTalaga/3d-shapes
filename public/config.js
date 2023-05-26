@@ -18,11 +18,15 @@ export const config = {
     },
   },
   entity: {
-    count: { min: 50, max: 100 },
+    count: { min: 100, max: 200 },
     size: {
       min: 20,
       max: 40,
       ratio: 0.5,
     },
+  },
+  obstacle: {
+    count: { min: 2, max: 8 },
+    height: { min: 20, max: 40 },
   },
 };
