@@ -17,6 +17,7 @@ export const config = {
       max: 150,
       ratio: 0.2,
     },
+    jump: 2000,
   },
   entity: {
     count: { min: 100, max: 200 },

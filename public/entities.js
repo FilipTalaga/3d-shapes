@@ -11,6 +11,7 @@ export const getPlayer = () => {
   const height = getRandomInt(width - width * size.ratio, width + width * size.ratio);
 
   return {
+    type: 'player',
     x: window.innerWidth / 2 - width / 2,
     y: window.innerHeight / 2 - height / 2,
     width,
@@ -35,6 +36,7 @@ export const getNpcs = () => {
     const height = getRandomInt(width - width * size.ratio, width + width * size.ratio);
 
     return {
+      type: 'npc',
       x: window.innerWidth / 2 - width / 2,
       y: window.innerHeight / 2 - height / 2,
       width,
@@ -67,6 +69,7 @@ export const getObstacles = () => {
     const height = getRandomInt(obstacle.height.min, obstacle.height.max);
 
     return {
+      type: 'obstacle',
       x: getRandomInt(horizontalPadding, window.innerWidth - width - horizontalPadding),
       y: verticalOffset * (i * 2 + 1),
       width,

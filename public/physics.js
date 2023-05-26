@@ -2,7 +2,9 @@ import { config } from './config.js';
 
 const { gravity, friction, bounce, airResistance } = config.world;
 
-export const getPhysics = (deltaTime, obstacles) => {
+export const getPhysics = (deltaTime, obstacles, controller) => {
+  const { controlsPressed } = controller;
+
   const collides = (entity, obstacle) =>
     entity.x < obstacle.x + obstacle.width &&
     entity.x + entity.width > obstacle.x &&
@@ -16,6 +18,8 @@ export const getPhysics = (deltaTime, obstacles) => {
 
   const applyAirResistance = entity =>
     (entity.velocity.x = Math.max(entity.velocity.x - airResistance * deltaTime, 0));
+
+  const jump = entity => (entity.velocity.y = -config.player.jump);
 
   const bounceHorizontally = entity => (entity.direction *= -bounce);
 
@@ -34,13 +38,18 @@ export const getPhysics = (deltaTime, obstacles) => {
     obstacles
       .filter(obstacle => collides(entity, obstacle))
       .forEach(obstacle => {
-        entity.y =
-          entity.y + entity.height > obstacle.y && entity.y < obstacle.y
-            ? obstacle.y - entity.height /* Collision from top */
-            : obstacle.y + obstacle.height; /* Collision from bottom */
+        const collidesFromTop = entity.y + entity.height > obstacle.y && entity.y < obstacle.y;
+
+        entity.y = collidesFromTop
+          ? obstacle.y - entity.height /* Collision from top */
+          : obstacle.y + obstacle.height; /* Collision from bottom */
 
         bounceVertically(entity);
         applyFricion(entity);
+
+        if (entity.type === 'player' && collidesFromTop && controlsPressed.space) {
+          jump(entity);
+        }
       });
 
     /*********************************************************/
@@ -55,6 +64,10 @@ export const getPhysics = (deltaTime, obstacles) => {
 
       bounceVertically(entity);
       applyFricion(entity);
+    }
+
+    if (entity.type === 'player' && collidesBottom && controlsPressed.space) {
+      jump(entity);
     }
   };
 
