@@ -15,6 +15,9 @@ export const gameLoop = (update, render, reset) => {
   const tick = time => {
     const deltaTime = (time - lastTime) / 1000;
 
+    /* Skip empty animation frame */
+    if (deltaTime === 0) return;
+
     update(deltaTime);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     render(ctx);
