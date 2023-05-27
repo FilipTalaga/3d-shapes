@@ -91,7 +91,9 @@ export const getPhysics = (deltaTime, obstacles, controller) => {
     applyAirResistance(entity);
 
     if (entity.type === 'player') {
-      if (controlsPressed.left) {
+      if (controlsPressed.left && controlsPressed.right) {
+        entity.velocity.x = 0;
+      } else if (controlsPressed.left) {
         entity.direction = -1;
         entity.velocity.x = config.player.speed;
       } else if (controlsPressed.right) {
