@@ -13,10 +13,11 @@ export const config = {
   },
   player: {
     size: {
-      min: 100,
-      max: 150,
+      min: 50,
+      max: 80,
       ratio: 0.2,
     },
+    speed: 1000,
     jump: 2000,
   },
   entity: {
