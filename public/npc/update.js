@@ -1,44 +1,29 @@
-import { config } from './config.js';
+import { config } from '../config.js';
+import { collides } from '../utils.js';
 
 const { gravity, friction, bounce, airResistance } = config.world;
 
-export const getPhysics = (deltaTime, obstacles, controller) => {
-  const { controlsPressed } = controller;
-
-  const collides = (entity, obstacle) =>
-    entity.x < obstacle.x + obstacle.width &&
-    entity.x + entity.width > obstacle.x &&
-    entity.y < obstacle.y + obstacle.height &&
-    entity.y + entity.height > obstacle.y;
+const moveNpc = game => entity => {
+  const {
+    deltaTime,
+    entities: { obstacles },
+  } = game;
 
   const applyGravity = entity => (entity.velocity.y += gravity * deltaTime);
 
   const applyFricion = entity => {
-    if (entity.type === 'player') return;
     entity.velocity.x = Math.max(entity.velocity.x - friction * deltaTime, 0);
   };
 
   const applyAirResistance = entity => {
-    if (entity.type === 'player') return;
     entity.velocity.x = Math.max(entity.velocity.x - airResistance * deltaTime, 0);
   };
 
-  const jump = entity => (entity.velocity.y = -config.player.jump);
+  const bounceHorizontally = entity => (entity.direction *= -bounce);
 
-  const bounceHorizontally = entity => {
-    if (entity.type === 'player') return;
-    entity.direction *= -bounce;
-  };
+  const bounceVertically = entity => (entity.velocity.y *= -bounce);
 
-  const bounceVertically = entity => {
-    if (entity.type === 'player') {
-      entity.velocity.y = 0;
-      return;
-    }
-    entity.velocity.y *= -bounce;
-  };
-
-  const moveVertically = entity => {
+  const moveVertically = () => {
     /*********************************************************/
     /* Move vertically                                       */
     /*********************************************************/
@@ -59,10 +44,6 @@ export const getPhysics = (deltaTime, obstacles, controller) => {
 
         bounceVertically(entity);
         applyFricion(entity);
-
-        if (entity.type === 'player' && collidesFromTop && controlsPressed.space) {
-          jump(entity);
-        }
       });
 
     /*********************************************************/
@@ -78,32 +59,13 @@ export const getPhysics = (deltaTime, obstacles, controller) => {
       bounceVertically(entity);
       applyFricion(entity);
     }
-
-    if (entity.type === 'player' && collidesBottom && controlsPressed.space) {
-      jump(entity);
-    }
   };
 
-  const moveHorizontally = entity => {
+  const moveHorizontally = () => {
     /*********************************************************/
     /* Move horizontally                                     */
     /*********************************************************/
     applyAirResistance(entity);
-
-    if (entity.type === 'player') {
-      if (controlsPressed.left && controlsPressed.right) {
-        entity.velocity.x = 0;
-      } else if (controlsPressed.left) {
-        entity.direction = -1;
-        entity.velocity.x = config.player.speed;
-      } else if (controlsPressed.right) {
-        entity.direction = 1;
-        entity.velocity.x = config.player.speed;
-      } else {
-        entity.velocity.x = 0;
-      }
-    }
-
     entity.x += entity.velocity.x * entity.direction * deltaTime;
 
     /*********************************************************/
@@ -137,10 +99,8 @@ export const getPhysics = (deltaTime, obstacles, controller) => {
     }
   };
 
-  const move = entity => {
-    moveVertically(entity);
-    moveHorizontally(entity);
-  };
-
-  return { move };
+  moveVertically();
+  moveHorizontally();
 };
+
+export const moveNpcs = game => game.entities.npcs.forEach(moveNpc(game));

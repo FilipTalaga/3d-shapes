@@ -1,30 +1,13 @@
-import { gameLoop } from './engine.js';
-import { getPlayer, getNpcs, getObstacles } from './entities.js';
-import { getRenderer } from './renderer.js';
-import { getPhysics } from './physics.js';
+import { makeGame } from './engine.js';
+import { spawnPlayer, movePlayer, drawPlayer } from './player/index.js';
+import { spawnObstacles, drawObstacles } from './obstacle/index.js';
+import { spawnNpcs, moveNpcs, drawNpcs } from './npc/index.js';
 
-let entities, obstacles;
+const spawners = [spawnObstacles, spawnNpcs, spawnPlayer];
+const updaters = [moveNpcs, movePlayer];
+const renderers = [drawObstacles, drawNpcs, drawPlayer];
 
-const spawn = () => {
-  const player = getPlayer();
-  const npcs = getNpcs();
-  entities = [...npcs, player];
-  obstacles = getObstacles();
-};
+const game = makeGame(spawners, updaters, renderers);
 
-const update = (deltaTime, controller) => {
-  const { move } = getPhysics(deltaTime, obstacles, controller);
-  entities.forEach(move);
-};
-
-const render = ctx => {
-  const { draw } = getRenderer(ctx);
-  obstacles.forEach(draw);
-  entities.forEach(draw);
-};
-
-const loop = gameLoop(update, render, spawn);
-
-window.addEventListener('load', loop.start);
-
-window.addEventListener('unload', loop.stop);
+window.addEventListener('load', game.start);
+window.addEventListener('unload', game.stop);

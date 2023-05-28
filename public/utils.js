@@ -12,3 +12,12 @@ export const stopEvents = events =>
   Object.entries(events).forEach(([name, handler]) => {
     window.removeEventListener(name, handler);
   });
+
+export const getMultiple = (getter, count) =>
+  new Array(count).fill().map((_, index) => getter(index, count));
+
+export const collides = (entity, obstacle) =>
+  entity.x < obstacle.x + obstacle.width &&
+  entity.x + entity.width > obstacle.x &&
+  entity.y < obstacle.y + obstacle.height &&
+  entity.y + entity.height > obstacle.y;

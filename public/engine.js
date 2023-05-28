@@ -1,11 +1,15 @@
 import { getController } from './controller.js';
 import { startEvents, stopEvents } from './utils.js';
 
-export const gameLoop = (update, render, spawn) => {
+export const makeGame = (spawners, updaters, renderers) => {
   const canvas = document.getElementById('gameCanvas');
-  const ctx = canvas.getContext('2d');
-  const controller = getController();
-  const { registerKey, releaseKey } = controller;
+
+  let game = {
+    entities: {},
+    deltaTime: 0,
+    controller: getController(),
+    ctx: canvas.getContext('2d'),
+  };
 
   let requestId;
   let isPaused = false;
@@ -17,14 +21,14 @@ export const gameLoop = (update, render, spawn) => {
   };
 
   const tick = time => {
-    const deltaTime = (time - lastTime) / 1000;
+    game.deltaTime = (time - lastTime) / 1000;
 
     /* Skip empty animation frame */
-    if (deltaTime === 0) return;
+    if (game.deltaTime === 0) return;
 
-    update(deltaTime, controller);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    render(ctx);
+    updaters.forEach(update => update(game));
+    game.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    renderers.forEach(render => render(game));
 
     requestFrame(time);
   };
@@ -53,13 +57,13 @@ export const gameLoop = (update, render, spawn) => {
   const events = {
     resize: reset,
     visibilitychange: pause,
-    keydown: registerKey,
-    keyup: releaseKey,
+    keydown: game.controller.registerKey,
+    keyup: game.controller.releaseKey,
   };
 
   const start = () => {
     resizeCanvas();
-    spawn();
+    spawners.forEach(spawn => spawn(game));
     startEvents(events);
     requestFrame(performance.now());
   };
