@@ -2,11 +2,12 @@ import { config } from '../config.js';
 import { collides } from '../utils.js';
 
 const { gravity, friction, bounce, airResistance } = config.world;
+const { playerBounce } = config.entity;
 
 const moveNpc = game => entity => {
   const {
     deltaTime,
-    entities: { obstacles },
+    entities: { obstacles, player },
   } = game;
 
   const applyGravity = entity => (entity.velocity.y += gravity * deltaTime);
@@ -22,6 +23,11 @@ const moveNpc = game => entity => {
   const bounceHorizontally = entity => (entity.direction *= -bounce);
 
   const bounceVertically = entity => (entity.velocity.y *= -bounce);
+
+  const avoidPlayer = entity => {
+    entity.velocity.x = entity.velocity.x > playerBounce ? entity.velocity.x : playerBounce;
+    entity.direction *= -1;
+  };
 
   const moveVertically = () => {
     /*********************************************************/
@@ -83,6 +89,19 @@ const moveNpc = game => entity => {
         bounceHorizontally(entity);
         applyFricion(entity);
       });
+
+    /*********************************************************/
+    /* Check player collision                              */
+    /*********************************************************/
+    if (collides(entity, player)) {
+      /* Align position with the player boundries */
+      entity.x =
+        entity.x + entity.width > player.x && entity.x < player.x
+          ? player.x - entity.width /* Collision from left */
+          : player.x + player.width; /* Collision from right */
+
+      avoidPlayer(entity);
+    }
 
     /*********************************************************/
     /* Check wall collision                                  */

@@ -17,7 +17,7 @@ export const config = {
       max: 80,
       ratio: 0.2,
     },
-    speed: 1000,
+    speed: 800,
     jump: 2000,
   },
   entity: {
@@ -27,6 +27,7 @@ export const config = {
       max: 40,
       ratio: 0.5,
     },
+    playerBounce: 1500,
   },
   obstacle: {
     count: { min: 2, max: 8 },
