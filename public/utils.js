@@ -21,3 +21,5 @@ export const collides = (entity, obstacle) =>
   entity.x + entity.width > obstacle.x &&
   entity.y < obstacle.y + obstacle.height &&
   entity.y + entity.height > obstacle.y;
+
+export const xor = (...conditions) => !(conditions.every(Boolean) || !conditions.some(Boolean));

@@ -26,7 +26,7 @@ const getObstacle = (index, count) => {
 };
 
 const getMapWalls = () => {
-  const color = getRandomColor({ l: 0.1, s: 0.1 });
+  const color = getRandomColor({ l: 0.3, s: 0 });
   const size = obstacle.wallSize;
 
   const top = { x: 0, y: 0, width: window.innerWidth, height: size };

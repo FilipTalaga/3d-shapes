@@ -1,5 +1,5 @@
 import { config } from '../config.js';
-import { collides } from '../utils.js';
+import { collides, xor } from '../utils.js';
 
 const {
   player: { jump },
@@ -45,13 +45,8 @@ export const movePlayer = game => {
   /*********************************************************/
   /* Apply controlled movement                             */
   /*********************************************************/
-  if (controlsPressed.ArrowLeft && controlsPressed.ArrowRight) {
-    player.velocity.x = 0;
-  } else if (controlsPressed.ArrowLeft) {
-    player.direction = -1;
-    player.velocity.x = config.player.speed;
-  } else if (controlsPressed.ArrowRight) {
-    player.direction = 1;
+  if (xor(controlsPressed.ArrowLeft, controlsPressed.ArrowRight)) {
+    player.direction = controlsPressed.ArrowLeft ? -1 : 1;
     player.velocity.x = config.player.speed;
   } else {
     player.velocity.x = 0;
