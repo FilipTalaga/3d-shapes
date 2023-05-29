@@ -1,5 +1,5 @@
-export const drawObstacles = ({ ctx, entities: { obstacles } }) =>
+export const drawObstacles = ({ ctx, entities: { obstacles }, draw }) =>
   obstacles.forEach(({ color, x, y, width, height }) => {
     ctx.fillStyle = color;
-    ctx.fillRect(x, y, width, height);
+    draw(x, y, width, height);
   });

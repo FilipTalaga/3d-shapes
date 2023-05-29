@@ -3,7 +3,8 @@ export const drawPlayer = ({
   entities: {
     player: { color, x, y, width, height },
   },
+  draw,
 }) => {
   ctx.fillStyle = color;
-  ctx.fillRect(x, y, width, height);
+  draw(x, y, width, height);
 };

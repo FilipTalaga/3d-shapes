@@ -34,7 +34,8 @@ const moveNpc = game => entity => {
         ? obstacle.y - entity.height /* Collision from top */
         : obstacle.y + obstacle.height; /* Collision from bottom */
 
-      entity.velocity.y *= -bounce; /* Bounce */
+      /* Bounce */
+      entity.velocity.y *= -bounce;
 
       /* Apply friction */
       entity.velocity.x = Math.max(entity.velocity.x - friction * deltaTime, 0);
@@ -62,7 +63,8 @@ const moveNpc = game => entity => {
           ? obstacle.x - entity.width /* Collision from left */
           : obstacle.x + obstacle.width; /* Collision from right */
 
-      entity.direction *= -bounce; /* Bounce */
+      /* Bounce */
+      entity.direction *= -bounce;
 
       /* Apply friction */
       entity.velocity.x = Math.max(entity.velocity.x - friction * deltaTime, 0);

@@ -1,5 +1,5 @@
-export const drawNpcs = ({ ctx, entities: { npcs } }) =>
+export const drawNpcs = ({ ctx, entities: { npcs }, draw }) =>
   npcs.forEach(({ color, x, y, width, height }) => {
     ctx.fillStyle = color;
-    ctx.fillRect(x, y, width, height);
+    draw(x, y, width, height);
   });

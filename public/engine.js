@@ -1,14 +1,21 @@
 import { getController } from './controller.js';
 import { startEvents, stopEvents } from './utils.js';
+import { config } from './config.js';
 
 export const makeGame = (spawners, updaters, renderers) => {
   const canvas = document.getElementById('gameCanvas');
 
+  const draw = (x, y, width, height) => {
+    game.ctx.fillRect(x - game.camera.x, y - game.camera.y, width, height);
+  };
+
   let game = {
+    camera: {},
     entities: {},
     deltaTime: 0,
     controller: getController(),
     ctx: canvas.getContext('2d'),
+    draw,
   };
 
   let requestId;
@@ -27,7 +34,7 @@ export const makeGame = (spawners, updaters, renderers) => {
     if (game.deltaTime === 0) return;
 
     updaters.forEach(update => update(game));
-    game.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    game.ctx.clearRect(0, 0, game.camera.width, game.camera.height);
     renderers.forEach(render => render(game));
 
     requestFrame(time);
