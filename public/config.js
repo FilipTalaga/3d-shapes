@@ -30,6 +30,7 @@ export const config = {
     playerBounce: 1500,
   },
   obstacle: {
+    wallSize: 40,
     count: { min: 2, max: 8 },
     height: { min: 20, max: 40 },
   },

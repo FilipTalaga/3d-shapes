@@ -25,8 +25,20 @@ const getObstacle = (index, count) => {
   };
 };
 
+const getMapWalls = () => {
+  const color = getRandomColor({ l: 0.1, s: 0.1 });
+  const size = obstacle.wallSize;
+
+  const top = { x: 0, y: 0, width: window.innerWidth, height: size };
+  const left = { x: 0, y: 0, width: size, height: window.innerHeight };
+  const right = { x: window.innerWidth - size, y: 0, width: size, height: window.innerHeight };
+  const bottom = { x: 0, y: window.innerHeight - size, width: window.innerWidth, height: size };
+
+  return [top, left, right, bottom].map(wall => ({ ...wall, color }));
+};
+
 export const spawnObstacles = game => {
   const count = getRandomInt(obstacle.count.min, obstacle.count.max);
 
-  game.entities.obstacles = getMultiple(getObstacle, count);
+  game.entities.obstacles = [...getMapWalls(), ...getMultiple(getObstacle, count)];
 };
