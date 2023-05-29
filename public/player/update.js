@@ -13,100 +13,65 @@ export const movePlayer = game => {
     controller: { controlsPressed },
   } = game;
 
-  const applyGravity = () => (player.velocity.y += gravity * deltaTime);
+  /*********************************************************/
+  /* Apply gravity                                         */
+  /*********************************************************/
+  player.velocity.y += gravity * deltaTime;
 
-  const applyJump = () => (player.velocity.y = -jump);
+  /*********************************************************/
+  /* Move vertically                                       */
+  /*********************************************************/
+  player.y += player.velocity.y * deltaTime;
 
-  const bounceVertically = () => (player.velocity.y = 0);
+  /*********************************************************/
+  /* Check obstacle collision                              */
+  /*********************************************************/
+  obstacles
+    .filter(obstacle => collides(player, obstacle))
+    .forEach(obstacle => {
+      const collidesFromTop = player.y + player.height > obstacle.y && player.y < obstacle.y;
 
-  const moveVertically = () => {
-    /*********************************************************/
-    /* Move vertically                                       */
-    /*********************************************************/
-    applyGravity();
-    player.y += player.velocity.y * deltaTime;
+      player.y = collidesFromTop
+        ? obstacle.y - player.height /* Collision from top */
+        : obstacle.y + obstacle.height; /* Collision from bottom */
 
-    /*********************************************************/
-    /* Check obstacle collision                              */
-    /*********************************************************/
-    obstacles
-      .filter(obstacle => collides(player, obstacle))
-      .forEach(obstacle => {
-        const collidesFromTop = player.y + player.height > obstacle.y && player.y < obstacle.y;
+      player.velocity.y = 0; /* Reset velocity on hit */
 
-        player.y = collidesFromTop
-          ? obstacle.y - player.height /* Collision from top */
-          : obstacle.y + obstacle.height; /* Collision from bottom */
+      if (collidesFromTop && controlsPressed.Space) {
+        player.velocity.y = -jump; /* Jump */
+      }
+    });
 
-        bounceVertically();
+  /*********************************************************/
+  /* Apply controlled movement                             */
+  /*********************************************************/
+  if (controlsPressed.ArrowLeft && controlsPressed.ArrowRight) {
+    player.velocity.x = 0;
+  } else if (controlsPressed.ArrowLeft) {
+    player.direction = -1;
+    player.velocity.x = config.player.speed;
+  } else if (controlsPressed.ArrowRight) {
+    player.direction = 1;
+    player.velocity.x = config.player.speed;
+  } else {
+    player.velocity.x = 0;
+  }
 
-        if (collidesFromTop && controlsPressed.Space) {
-          applyJump();
-        }
-      });
+  /*********************************************************/
+  /* Move horizontally                                     */
+  /*********************************************************/
+  player.x += player.velocity.x * player.direction * deltaTime;
 
-    /*********************************************************/
-    /* Check ground and ceiling collision                    */
-    /*********************************************************/
-    const collidesTop = player.y <= 0;
-    const collidesBottom = player.y + player.height >= window.innerHeight;
-
-    if (collidesTop || collidesBottom) {
-      /* Align with ground if went over */
-      player.y = collidesTop ? 0 : window.innerHeight - player.height;
-
-      bounceVertically();
-    }
-
-    if (collidesBottom && controlsPressed.Space) {
-      applyJump();
-    }
-  };
-
-  const moveHorizontally = () => {
-    /*********************************************************/
-    /* Move horizontally                                     */
-    /*********************************************************/
-
-    if (controlsPressed.ArrowLeft && controlsPressed.ArrowRight) {
-      player.velocity.x = 0;
-    } else if (controlsPressed.ArrowLeft) {
-      player.direction = -1;
-      player.velocity.x = config.player.speed;
-    } else if (controlsPressed.ArrowRight) {
-      player.direction = 1;
-      player.velocity.x = config.player.speed;
-    } else {
-      player.velocity.x = 0;
-    }
-
-    player.x += player.velocity.x * player.direction * deltaTime;
-
-    /*********************************************************/
-    /* Check obstacle collision                              */
-    /*********************************************************/
-    obstacles
-      .filter(obstacle => collides(player, obstacle))
-      .forEach(obstacle => {
-        /* Align position with the obstacle boundries */
-        player.x =
-          player.x + player.width > obstacle.x && player.x < obstacle.x
-            ? obstacle.x - player.width /* Collision from left */
-            : obstacle.x + obstacle.width; /* Collision from right */
-      });
-
-    /*********************************************************/
-    /* Check wall collision                                  */
-    /*********************************************************/
-    const collidesLeft = player.x <= 0;
-    const collidesRight = player.x + player.width >= window.innerWidth;
-
-    if (collidesLeft || collidesRight) {
-      /* Align with wall if went over */
-      player.x = collidesLeft ? 0 : window.innerWidth - player.width;
-    }
-  };
-
-  moveVertically();
-  moveHorizontally();
+  /*********************************************************/
+  /* Check obstacle collision                              */
+  /*********************************************************/
+  obstacles
+    .filter(obstacle => collides(player, obstacle))
+    .forEach(obstacle => {
+      /* Align position with the obstacle boundries */
+      player.x =
+        player.x + player.width > obstacle.x && player.x < obstacle.x
+          ? obstacle.x - player.width /* Collision from left */
+          : obstacle.x + obstacle.width; /* Collision from right */
+    });
 };
