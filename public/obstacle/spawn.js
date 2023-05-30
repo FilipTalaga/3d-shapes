@@ -1,14 +1,13 @@
 import { config } from '../config.js';
 import { getRandomInt, getRandomColor, getMultiple } from '../utils.js';
 
-const { obstacle, world } = config;
+const { obstacles, world } = config;
 
 const getMapWalls = () => {
-  const color = getRandomColor({ l: 0.3, s: 0 });
-  const size = obstacle.wallSize;
+  const color = obstacles.walls.color;
+  const size = obstacles.walls.size;
 
   const { width, height } = world;
-
   const { innerWidth, innerHeight } = window;
 
   const left = {
@@ -44,9 +43,10 @@ const getMapWalls = () => {
 
 const getObstacle = (rows, cols) => index => {
   const { width: innerWidth, height: innerHeight } = world;
+  const { walls, platforms } = obstacles;
 
-  const mapWidth = innerWidth - obstacle.wallSize * 2;
-  const mapHeight = innerHeight - obstacle.wallSize * 2;
+  const mapWidth = innerWidth - walls.size * 2;
+  const mapHeight = innerHeight - walls.size * 2;
 
   const cellWidth = mapWidth / cols;
   const cellHeight = mapHeight / rows;
@@ -54,10 +54,10 @@ const getObstacle = (rows, cols) => index => {
   const row = Math.floor(index / cols);
 
   const width = getRandomInt(cellWidth * 0.2, cellWidth * 0.8);
-  const height = getRandomInt(obstacle.height.min, obstacle.height.max);
+  const height = getRandomInt(platforms.height.min, platforms.height.max);
 
-  const cellX = obstacle.wallSize + ((cellWidth * index) % mapWidth);
-  const cellY = obstacle.wallSize + cellHeight * row;
+  const cellX = walls.size + ((cellWidth * index) % mapWidth);
+  const cellY = walls.size + cellHeight * row;
 
   const x = getRandomInt(cellX, cellX + cellWidth - width);
   const y = getRandomInt(cellY, cellY + cellHeight - height);
@@ -74,8 +74,10 @@ const getObstacle = (rows, cols) => index => {
 };
 
 export const spawnObstacles = game => {
-  const count = getRandomInt(obstacle.count.min, obstacle.count.max);
+  const { platforms } = obstacles;
   const { width, height } = world;
+
+  const count = getRandomInt(platforms.count.min, platforms.count.max);
 
   const proportion = width / height;
   const totalCells = count / proportion;
