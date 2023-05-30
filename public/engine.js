@@ -1,6 +1,5 @@
 import { getController } from './controller.js';
 import { startEvents, stopEvents } from './utils.js';
-import { config } from './config.js';
 
 export const makeGame = (spawners, updaters, renderers) => {
   const canvas = document.getElementById('gameCanvas');
@@ -11,6 +10,7 @@ export const makeGame = (spawners, updaters, renderers) => {
 
   let game = {
     camera: {},
+    background: {},
     entities: {},
     deltaTime: 0,
     controller: getController(),

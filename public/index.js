@@ -3,10 +3,12 @@ import { spawnPlayer, movePlayer, drawPlayer } from './player/index.js';
 import { spawnObstacles, drawObstacles } from './obstacle/index.js';
 import { spawnNpcs, moveNpcs, drawNpcs } from './npc/index.js';
 import { spawnCamera, moveCamera } from './camera/index.js';
+import { spawnBackground } from './background/spawn.js';
+import { drawBackground } from './background/draw.js';
 
-const spawners = [spawnPlayer, spawnObstacles, spawnNpcs, spawnCamera];
+const spawners = [spawnBackground, spawnPlayer, spawnObstacles, spawnNpcs, spawnCamera];
 const updaters = [moveNpcs, movePlayer, moveCamera];
-const renderers = [drawObstacles, drawNpcs, drawPlayer];
+const renderers = [drawBackground, drawObstacles, drawNpcs, drawPlayer];
 
 const game = makeGame(spawners, updaters, renderers);
 
