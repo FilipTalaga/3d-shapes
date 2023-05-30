@@ -2,7 +2,9 @@ import { config } from '../config.js';
 import { collides, xor } from '../utils.js';
 
 const {
-  player: { jump },
+  entities: {
+    player: { jump, speed, accelerationTime },
+  },
   world: { gravity },
 } = config;
 
@@ -45,11 +47,18 @@ export const movePlayer = game => {
   /*********************************************************/
   /* Apply controlled movement                             */
   /*********************************************************/
+
+  const acceleration = speed * deltaTime * (1 / accelerationTime);
+
   if (xor(controlsPressed.ArrowLeft, controlsPressed.ArrowRight)) {
-    player.direction = controlsPressed.ArrowLeft ? -1 : 1;
-    player.velocity.x = config.player.speed;
+    const newDirection = controlsPressed.ArrowLeft ? -1 : 1;
+    if (player.direction !== newDirection) {
+      player.velocity.x = 0;
+    }
+    player.direction = newDirection;
+    player.velocity.x = Math.min(player.velocity.x + acceleration, speed);
   } else {
-    player.velocity.x = 0;
+    player.velocity.x = Math.max(player.velocity.x - acceleration, 0);
   }
 
   /*********************************************************/
