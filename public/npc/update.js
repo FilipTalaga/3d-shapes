@@ -2,8 +2,10 @@ import { config } from '../config.js';
 import { collides } from '../utils.js';
 
 const {
-  world: { gravity, friction, bounce, airResistance },
-  entity: { playerBounce },
+  world: { gravity },
+  entities: {
+    npcs: { playerBounce, friction, bounce, airResistance },
+  },
 } = config;
 
 const moveNpc = game => entity => {

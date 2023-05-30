@@ -2,8 +2,10 @@ import { getRandomInt, getRandomColor, getMultiple } from '../utils.js';
 import { config } from '../config.js';
 
 const {
-  entity: { size, count },
-  simulation: { velocity },
+  world,
+  entities: {
+    npcs: { size, count, velocity },
+  },
 } = config;
 
 const getNpc = () => {
@@ -11,8 +13,8 @@ const getNpc = () => {
   const height = getRandomInt(width - width * size.ratio, width + width * size.ratio);
 
   return {
-    x: window.innerWidth / 2 - width / 2,
-    y: window.innerHeight / 2 - height / 2,
+    x: world.width / 2 - width / 2,
+    y: world.height / 2 - height / 2,
     width,
     height,
     color: getRandomColor({ l: 0.7 }),
