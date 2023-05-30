@@ -62,7 +62,7 @@ const getObstacle = (rows, cols) => index => {
   const x = getRandomInt(cellX, cellX + cellWidth - width);
   const y = getRandomInt(cellY, cellY + cellHeight - height);
 
-  const color = getRandomColor({ l: 0.9, s: 0.5 });
+  const color = getRandomColor({ l: 0.8 });
 
   return {
     x,

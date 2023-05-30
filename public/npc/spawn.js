@@ -17,7 +17,7 @@ const getNpc = () => {
     y: world.height / 2 - height / 2,
     width,
     height,
-    color: getRandomColor({ l: 0.7 }),
+    color: getRandomColor({ l: 0.6 }),
     velocity: {
       x: getRandomInt(velocity.x.min, velocity.x.max),
       y: getRandomInt(velocity.y.min, velocity.y.max),
