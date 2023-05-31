@@ -8,16 +8,17 @@ const {
   },
 } = config;
 
-const getNpc = () => {
+const getNpc = hue => () => {
   const width = getRandomInt(size.min, size.max);
   const height = getRandomInt(width - width * size.ratio, width + width * size.ratio);
+  const color = `hsl(${hue}, 80%, 80%)`;
 
   return {
     x: world.width / 2 - width / 2,
-    y: world.height / 2 - height / 2,
+    y: world.height * 0.2,
     width,
     height,
-    color: getRandomColor({ l: 0.6 }),
+    color,
     velocity: {
       x: getRandomInt(velocity.x.min, velocity.x.max),
       y: getRandomInt(velocity.y.min, velocity.y.max),
@@ -29,5 +30,7 @@ const getNpc = () => {
 export const spawnNpcs = game => {
   const total = getRandomInt(count.min, count.max);
 
-  game.entities.npcs = getMultiple(getNpc, total);
+  const hue = game.background.hue;
+
+  game.entities.npcs = getMultiple(getNpc(hue), total);
 };

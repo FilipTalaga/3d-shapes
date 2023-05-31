@@ -41,12 +41,14 @@ const getMapWalls = () => {
   return [top, left, right, bottom].map(wall => ({ ...wall, color }));
 };
 
-const getObstacle = (rows, cols) => index => {
+const getObstacle = (rows, cols, hue) => index => {
   const { width: innerWidth, height: innerHeight } = world;
   const { walls, platforms } = obstacles;
 
-  const mapWidth = innerWidth - walls.size * 2;
-  const mapHeight = innerHeight - walls.size * 2;
+  const [top, right, bottom, left] = platforms.padding;
+
+  const mapWidth = innerWidth - walls.size * 2 - right - left;
+  const mapHeight = innerHeight - walls.size * 2 - top - bottom;
 
   const cellWidth = mapWidth / cols;
   const cellHeight = mapHeight / rows;
@@ -56,13 +58,13 @@ const getObstacle = (rows, cols) => index => {
   const width = getRandomInt(cellWidth * 0.2, cellWidth * 0.8);
   const height = getRandomInt(platforms.height.min, platforms.height.max);
 
-  const cellX = walls.size + ((cellWidth * index) % mapWidth);
-  const cellY = walls.size + cellHeight * row;
+  const cellX = left + walls.size + ((cellWidth * index) % mapWidth);
+  const cellY = top + walls.size + cellHeight * row;
 
   const x = getRandomInt(cellX, cellX + cellWidth - width);
   const y = getRandomInt(cellY, cellY + cellHeight - height);
 
-  const color = getRandomColor({ l: 0.8 });
+  const color = `hsl(${hue}, 70%, 50%)`;
 
   return {
     x,
@@ -87,8 +89,11 @@ export const spawnObstacles = game => {
   const rows = Math.round(numRows);
   const cols = Math.round(numColumns);
 
+  /* Background's complementary color */
+  const hue = (game.background.hue + 180) % 360;
+
   game.entities.obstacles = [
     ...getMapWalls(),
-    ...getMultiple(getObstacle(rows, cols), rows * cols),
+    ...getMultiple(getObstacle(rows, cols, hue), rows * cols),
   ];
 };

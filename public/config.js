@@ -35,9 +35,9 @@ export const config = {
       size: 0,
     },
     platforms: {
-      count: { min: 40, max: 60 },
-      width: { min: 400, max: 800 },
-      height: { min: 20, max: 40 },
+      padding: [800, 400, 200, 400],
+      count: { min: 60, max: 80 },
+      height: { min: 40, max: 40 },
     },
   },
   camera: {

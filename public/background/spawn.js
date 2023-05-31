@@ -15,6 +15,7 @@ export const spawnBackground = game => {
   const rowHeight = height / rowsCount;
   const lightOffset = (light.max - light.min) / (rowsCount - 1);
   const parallaxRate = 1 / (rowsCount - 1);
+  const hue = getRandomInt(0, 360);
 
   game.background = {
     rowsCount,
@@ -22,9 +23,10 @@ export const spawnBackground = game => {
     rowHeight,
     lightOffset,
     parallaxRate,
+    hue,
     layers: getMultiple(rowIndex => {
       const parallax = 1 - rowIndex * parallaxRate;
-      const color = `hsl(0, 10%, ${light.max - rowIndex * lightOffset}%)`;
+      const color = `hsl(${hue}, 10%, ${light.max - rowIndex * lightOffset}%)`;
 
       /* Background */
       if (rowIndex === 0) {
