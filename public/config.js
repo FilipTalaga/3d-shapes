@@ -1,7 +1,7 @@
 export const config = {
   world: {
-    width: 10000,
-    height: 5000,
+    width: 20_000,
+    height: 2000,
     gravity: 1200,
   },
   entities: {
@@ -13,7 +13,7 @@ export const config = {
       accelerationTime: 0.2,
     },
     npcs: {
-      count: { min: 1000, max: 2000 },
+      count: { min: 80, max: 120 },
       size: {
         min: 15,
         max: 30,
@@ -32,17 +32,27 @@ export const config = {
   obstacles: {
     walls: {
       color: 'hsl(0, 0%, 5%)',
-      size: 20,
+      size: 0,
     },
     platforms: {
-      count: { min: 80, max: 120 },
+      count: { min: 40, max: 60 },
       width: { min: 400, max: 800 },
       height: { min: 20, max: 40 },
     },
   },
+  camera: {
+    position: {
+      x: 0.5,
+      y: 0.6,
+    },
+  },
   environment: {
     background: {
-      rows: 10,
+      rows: 5,
+      cols: {
+        width: 100,
+        ratio: 0.5,
+      },
       light: { min: 20, max: 60 },
     },
   },

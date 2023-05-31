@@ -8,8 +8,8 @@ const {
 export const spawnPlayer = game => {
   const width = player.size;
   const height = player.size;
-  const x = world.width / 4;
-  const y = world.height / 2;
+  const x = world.width / 2 - width / 2;
+  const y = world.height / 2 - height / 2;
   const color = player.color;
   const velocity = { x: 0, y: 0 };
   const direction = 1;
