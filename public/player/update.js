@@ -3,7 +3,7 @@ import { collides, xor } from '../utils.js';
 
 const {
   entities: {
-    player: { jump, speed, accelerationTime },
+    player: { jump, speed, accelerationTime, rotation },
   },
   world: { gravity },
 } = config;
@@ -30,27 +30,29 @@ export const movePlayer = game => {
   /*********************************************************/
   /* Check obstacle collision                              */
   /*********************************************************/
+  player.standing = false;
   obstacles
     .filter(obstacle => collides(player, obstacle))
     .forEach(obstacle => {
-      const collidesFromTop = player.y + player.height > obstacle.y && player.y < obstacle.y;
+      player.standing = player.y + player.height > obstacle.y && player.y < obstacle.y;
 
-      player.y = collidesFromTop
+      player.y = player.standing
         ? obstacle.y - player.height /* Collision from top */
         : obstacle.y + obstacle.height; /* Collision from bottom */
 
       player.velocity.y = 0; /* Reset velocity on hit */
-
-      /* Reset jump state */
-      if (!controlsPressed.Space && collidesFromTop) {
-        player.jumpState = states.GROUND;
-      }
     });
 
   /*********************************************************/
   /* Handle jump                                           */
   /*********************************************************/
   switch (player.jumpState) {
+    default:
+    case states.FALL:
+      if (!controlsPressed.Space && player.standing) {
+        player.jumpState = states.GROUND;
+      }
+      break;
     case states.GROUND:
       if (controlsPressed.Space) {
         player.velocity.y = -jump; /* Jump */
@@ -69,6 +71,15 @@ export const movePlayer = game => {
       }
       break;
   }
+
+  /*********************************************************/
+  /* Apply rotation                                        */
+  /*********************************************************/
+  const getNewAngle = rate => player.angle + rate * player.direction * deltaTime;
+
+  player.angle = player.standing
+    ? Math.min(Math.abs(getNewAngle(rotation.groundRate)), 90) * player.direction
+    : getNewAngle(rotation.airRate) % 90;
 
   /*********************************************************/
   /* Apply controlled movement                             */

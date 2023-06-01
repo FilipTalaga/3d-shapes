@@ -14,6 +14,7 @@ export const spawnPlayer = game => {
   const velocity = { x: 0, y: 0 };
   const direction = 1;
   const jumpState = 3;
+  const angle = 0;
 
   game.entities.player = {
     width,
@@ -24,5 +25,6 @@ export const spawnPlayer = game => {
     velocity,
     direction,
     jumpState,
+    angle,
   };
 };

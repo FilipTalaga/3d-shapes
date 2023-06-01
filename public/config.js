@@ -11,6 +11,10 @@ export const config = {
       speed: 600, // default: 400
       jump: 800, // default: 600
       accelerationTime: 0.2,
+      rotation: {
+        airRate: 130,
+        groundRate: 500,
+      },
     },
     npcs: {
       count: { min: 200, max: 300 },
