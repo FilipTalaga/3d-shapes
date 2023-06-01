@@ -2,7 +2,7 @@ export const config = {
   world: {
     width: 20_000,
     height: 2000,
-    gravity: 1200,
+    gravity: 1600, // default: 1200
   },
   entities: {
     player: {
@@ -12,8 +12,8 @@ export const config = {
       jump: 800, // default: 600
       accelerationTime: 0.2,
       rotation: {
-        airRate: 130,
-        groundRate: 500,
+        airRate: 180,
+        groundRate: 180 * 3,
       },
     },
     npcs: {
