@@ -46,30 +46,16 @@ export const movePlayer = game => {
   /*********************************************************/
   /* Handle jump                                           */
   /*********************************************************/
-  switch (player.jumpState) {
-    default:
-    case states.FALL:
-      if (!controlsPressed.Space && player.standing) {
-        player.jumpState = states.GROUND;
-      }
-      break;
-    case states.GROUND:
-      if (controlsPressed.Space) {
-        player.velocity.y = -jump; /* Jump */
-        player.jumpState = states.JUMP;
-      }
-      break;
-    case states.JUMP:
-      if (!controlsPressed.Space) {
-        player.jumpState = states.DOUBLE;
-      }
-      break;
-    case states.DOUBLE:
-      if (controlsPressed.Space) {
-        player.velocity.y = -jump; /* Jump */
-        player.jumpState = states.FALL;
-      }
-      break;
+  if (!controlsPressed.Space && player.standing) {
+    player.jumpState = states.GROUND;
+  } else if (player.jumpState === states.GROUND && controlsPressed.Space) {
+    player.velocity.y = -jump; /* Jump */
+    player.jumpState = states.JUMP;
+  } else if (player.jumpState === states.JUMP && !controlsPressed.Space) {
+    player.jumpState = states.DOUBLE;
+  } else if (player.jumpState === states.DOUBLE && controlsPressed.Space) {
+    player.velocity.y = -jump; /* Jump */
+    player.jumpState = states.FALL;
   }
 
   /*********************************************************/
