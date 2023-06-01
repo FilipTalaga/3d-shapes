@@ -40,6 +40,11 @@ export const movePlayer = game => {
         : obstacle.y + obstacle.height; /* Collision from bottom */
 
       player.velocity.y = 0; /* Reset velocity on hit */
+
+      /* Reset jump state */
+      if (!controlsPressed.Space && collidesFromTop) {
+        player.jumpState = states.GROUND;
+      }
     });
 
   /*********************************************************/
@@ -55,22 +60,12 @@ export const movePlayer = game => {
     case states.JUMP:
       if (!controlsPressed.Space) {
         player.jumpState = states.DOUBLE;
-      } else if (player.velocity.y === 0) {
-        player.jumpState = states.FALL;
       }
       break;
     case states.DOUBLE:
       if (controlsPressed.Space) {
         player.velocity.y = -jump; /* Jump */
         player.jumpState = states.FALL;
-      } else if (player.velocity.y === 0) {
-        player.jumpState = states.FALL;
-      }
-      break;
-    default:
-    case states.FALL:
-      if (player.velocity.y === 0 && !controlsPressed.Space) {
-        player.jumpState = states.GROUND;
       }
       break;
   }
@@ -78,7 +73,6 @@ export const movePlayer = game => {
   /*********************************************************/
   /* Apply controlled movement                             */
   /*********************************************************/
-
   const acceleration = speed * deltaTime * (1 / accelerationTime);
 
   if (xor(controlsPressed.ArrowLeft, controlsPressed.ArrowRight)) {
