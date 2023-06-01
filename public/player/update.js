@@ -8,6 +8,8 @@ const {
   world: { gravity },
 } = config;
 
+const states = { GROUND: 0, JUMP: 1, DOUBLE: 2, FALL: 3 };
+
 export const movePlayer = game => {
   const {
     deltaTime,
@@ -38,11 +40,40 @@ export const movePlayer = game => {
         : obstacle.y + obstacle.height; /* Collision from bottom */
 
       player.velocity.y = 0; /* Reset velocity on hit */
-
-      if (collidesFromTop && controlsPressed.Space) {
-        player.velocity.y = -jump; /* Jump */
-      }
     });
+
+  /*********************************************************/
+  /* Handle jump                                           */
+  /*********************************************************/
+  switch (player.jumpState) {
+    case states.GROUND:
+      if (controlsPressed.Space) {
+        player.velocity.y = -jump; /* Jump */
+        player.jumpState = states.JUMP;
+      }
+      break;
+    case states.JUMP:
+      if (!controlsPressed.Space) {
+        player.jumpState = states.DOUBLE;
+      } else if (player.velocity.y === 0) {
+        player.jumpState = states.FALL;
+      }
+      break;
+    case states.DOUBLE:
+      if (controlsPressed.Space) {
+        player.velocity.y = -jump; /* Jump */
+        player.jumpState = states.FALL;
+      } else if (player.velocity.y === 0) {
+        player.jumpState = states.FALL;
+      }
+      break;
+    default:
+    case states.FALL:
+      if (player.velocity.y === 0 && !controlsPressed.Space) {
+        player.jumpState = states.GROUND;
+      }
+      break;
+  }
 
   /*********************************************************/
   /* Apply controlled movement                             */

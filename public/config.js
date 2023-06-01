@@ -8,12 +8,12 @@ export const config = {
     player: {
       color: 'hsl(0, 0%, 95%)',
       size: 60,
-      speed: 800, // default: 400
-      jump: 1200, // default: 600
+      speed: 600, // default: 400
+      jump: 800, // default: 600
       accelerationTime: 0.2,
     },
     npcs: {
-      count: { min: 80, max: 120 },
+      count: { min: 200, max: 300 },
       size: {
         min: 15,
         max: 30,
