@@ -11,6 +11,7 @@ export const config = {
       speed: 600, // default: 400
       jump: 800, // default: 600
       accelerationTime: 0.2,
+      maxJumps: 2,
       rotation: {
         airRate: 180,
         groundRate: 180 * 3,

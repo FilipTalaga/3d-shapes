@@ -3,12 +3,10 @@ import { collides, xor } from '../utils.js';
 
 const {
   entities: {
-    player: { jump, speed, accelerationTime, rotation },
+    player: { jump, speed, accelerationTime, rotation, maxJumps },
   },
   world: { gravity },
 } = config;
-
-const states = { GROUND: 0, JUMP: 1, DOUBLE: 2, FALL: 3 };
 
 export const movePlayer = game => {
   const {
@@ -46,16 +44,25 @@ export const movePlayer = game => {
   /*********************************************************/
   /* Handle jump                                           */
   /*********************************************************/
-  if (!controlsPressed.Space && player.standing) {
-    player.jumpState = states.GROUND;
-  } else if (player.jumpState === states.GROUND && controlsPressed.Space) {
+
+  /* Toggle jump key */
+  if (!controlsPressed.Space) {
+    player.jumpReady = true;
+
+    /* Reset jump count on the ground */
+    player.jumps = player.standing ? maxJumps : player.jumps;
+  }
+
+  /* Take one jump away after fall */
+  if (!player.standing && player.jumps >= maxJumps) {
+    player.jumps = maxJumps - 1;
+  }
+
+  /* Jump until any jumps left */
+  if (player.jumpReady && controlsPressed.Space && player.jumps > 0) {
     player.velocity.y = -jump; /* Jump */
-    player.jumpState = states.JUMP;
-  } else if (player.jumpState === states.JUMP && !controlsPressed.Space) {
-    player.jumpState = states.DOUBLE;
-  } else if (player.jumpState === states.DOUBLE && controlsPressed.Space) {
-    player.velocity.y = -jump; /* Jump */
-    player.jumpState = states.FALL;
+    player.jumpReady = false;
+    player.jumps -= 1;
   }
 
   /*********************************************************/
