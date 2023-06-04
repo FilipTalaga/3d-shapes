@@ -11,6 +11,7 @@ export const makeGame = (spawners, updaters, renderers) => {
   let game = {
     camera: {},
     background: {},
+    ui: {},
     entities: {},
     deltaTime: 0,
     controller: getController(),
