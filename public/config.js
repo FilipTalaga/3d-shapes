@@ -3,6 +3,7 @@ export const config = {
     width: 20_000,
     height: 2000,
     gravity: 1600, // default: 1200
+    maxVelocity: 3000,
   },
   entities: {
     player: {

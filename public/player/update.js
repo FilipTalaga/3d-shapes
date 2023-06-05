@@ -5,7 +5,7 @@ const {
   entities: {
     player: { jump, speed, accelerationTime, rotation, maxJumps },
   },
-  world: { gravity },
+  world: { gravity, maxVelocity },
 } = config;
 
 export const movePlayer = game => {
@@ -18,7 +18,7 @@ export const movePlayer = game => {
   /*********************************************************/
   /* Apply gravity                                         */
   /*********************************************************/
-  player.velocity.y += gravity * deltaTime;
+  player.velocity.y = Math.min(player.velocity.y + gravity * deltaTime, maxVelocity);
 
   /*********************************************************/
   /* Move vertically                                       */
