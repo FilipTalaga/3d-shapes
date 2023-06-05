@@ -42,8 +42,24 @@ export const makeGame = (spawners, updaters, renderers) => {
   };
 
   const resizeCanvas = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const backingStoreRatio =
+      game.ctx.webkitBackingStorePixelRatio ||
+      game.ctx.mozBackingStorePixelRatio ||
+      game.ctx.msBackingStorePixelRatio ||
+      game.ctx.oBackingStorePixelRatio ||
+      game.ctx.backingStorePixelRatio ||
+      1;
+
+    const ratio = devicePixelRatio / backingStoreRatio;
+
+    canvas.width = window.innerWidth * ratio;
+    canvas.height = window.innerHeight * ratio;
+
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+
+    game.ctx.scale(ratio, ratio);
   };
 
   const reset = () => {
