@@ -1,5 +1,5 @@
 export const spawnUI = game => {
   game.ui = {
-    debug: { open: true, lock: false },
+    debug: { open: false, lock: false },
   };
 };

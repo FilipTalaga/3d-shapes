@@ -68,11 +68,32 @@ export const movePlayer = game => {
   /*********************************************************/
   /* Apply rotation                                        */
   /*********************************************************/
-  const getNewAngle = rate => player.angle + rate * player.direction * deltaTime;
 
-  player.angle = player.standing
-    ? Math.min(Math.abs(getNewAngle(rotation.groundRate)), 90) * player.direction
-    : getNewAngle(rotation.airRate) % 90;
+  if (!player.standing) {
+    const speedRatio = player.velocity.x / speed;
+    const deltaRotation = rotation.air * player.direction * speedRatio;
+
+    /* Rotate in the air */
+    player.angle += deltaRotation * deltaTime;
+
+    /* Keep the angle in 0-90 range */
+    if (player.angle < 0) {
+      player.angle += 90;
+    } else if (player.angle > 90) {
+      player.angle -= 90;
+    }
+  } else if (player.angle !== 0) {
+    const direction = player.angle > 45 ? 1 : -1;
+    const deltaRotation = rotation.ground * direction;
+
+    /* Align with the ground */
+    player.angle += deltaRotation * deltaTime;
+
+    /* Reset the angle if aligned with the ground */
+    if (player.angle < 0 || player.angle > 90) {
+      player.angle = 0;
+    }
+  }
 
   /*********************************************************/
   /* Apply controlled movement                             */

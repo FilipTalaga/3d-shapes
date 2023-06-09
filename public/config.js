@@ -14,8 +14,8 @@ export const config = {
       accelerationTime: 0.2,
       maxJumps: 2,
       rotation: {
-        airRate: 180,
-        groundRate: 180 * 3,
+        air: 180,
+        ground: 180 * 2,
       },
     },
     npcs: {
