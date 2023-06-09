@@ -15,7 +15,7 @@ export const config = {
       maxJumps: 2,
       rotation: {
         air: 180,
-        ground: 180 * 2,
+        ground: 180 * 3,
       },
     },
     npcs: {
