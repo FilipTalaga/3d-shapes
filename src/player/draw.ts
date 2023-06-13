@@ -1,10 +1,12 @@
+import { Game } from '../types';
+
 export const drawPlayer = ({
   ctx,
   camera,
   entities: {
     player: { color, x, y, width, height, angle },
   },
-}) => {
+}: Game) => {
   const origin = { x: width / 2, y: height / 2 };
 
   ctx.save();

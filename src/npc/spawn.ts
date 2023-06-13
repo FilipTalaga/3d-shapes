@@ -1,5 +1,6 @@
-import { getRandomInt, getRandomColor, getMultiple } from '../utils.js';
-import { config } from '../config.js';
+import { getRandomInt, getMultiple } from '../utils';
+import { config } from '../config';
+import { Game } from '../types';
 
 const {
   world,
@@ -8,7 +9,7 @@ const {
   },
 } = config;
 
-const getNpc = hue => () => {
+const getNpc = (hue: number) => () => {
   const width = getRandomInt(size.min, size.max);
   const height = getRandomInt(width - width * size.ratio, width + width * size.ratio);
   const color = `hsl(${hue}, 80%, 80%)`;
@@ -27,7 +28,7 @@ const getNpc = hue => () => {
   };
 };
 
-export const spawnNpcs = game => {
+export const spawnNpcs = (game: Game) => {
   const total = getRandomInt(count.min, count.max);
 
   const hue = game.background.hue;

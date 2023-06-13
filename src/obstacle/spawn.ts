@@ -1,5 +1,6 @@
-import { config } from '../config.js';
-import { getRandomInt, getRandomColor, getMultiple } from '../utils.js';
+import { config } from '../config';
+import { Game } from '../types';
+import { getRandomInt, getMultiple } from '../utils';
 
 const { obstacles, world } = config;
 
@@ -41,7 +42,7 @@ const getMapWalls = () => {
   return [top, left, right, bottom].map(wall => ({ ...wall, color }));
 };
 
-const getObstacle = (rows, cols, hue) => index => {
+const getObstacle = (rows: number, cols: number, hue: number) => (index: number) => {
   const { width: innerWidth, height: innerHeight } = world;
   const { walls, platforms } = obstacles;
 
@@ -75,7 +76,7 @@ const getObstacle = (rows, cols, hue) => index => {
   };
 };
 
-export const spawnObstacles = game => {
+export const spawnObstacles = (game: Game) => {
   const { platforms } = obstacles;
   const { width, height } = world;
 

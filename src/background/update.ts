@@ -1,4 +1,6 @@
-export const moveBackground = game => {
+import { Game } from '../types';
+
+export const moveBackground = (game: Game) => {
   const {
     background: { layers },
     entities: { player },

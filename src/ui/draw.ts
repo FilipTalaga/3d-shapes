@@ -1,3 +1,5 @@
+import { Game } from '../types';
+
 export const drawUI = ({
   ctx,
   camera,
@@ -5,7 +7,7 @@ export const drawUI = ({
   entities: {
     player: { x, y, width, height, jumps, jumpReady, velocity, direction, angle },
   },
-}) => {
+}: Game) => {
   if (!debug.open) return;
 
   const origin = { x: x - camera.x + width / 2, y: y - camera.y + height / 2 };
@@ -24,10 +26,10 @@ export const drawUI = ({
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.font = '30px Arial';
-  ctx.fillText(jumps, origin.x, origin.y + 4);
+  ctx.fillText(jumps.toString(), origin.x, origin.y + 4);
 
   /* Player stats */
-  const drawInfo = texts => {
+  const drawInfo = (texts: string[]) => {
     const marginLeft = 100;
     const fontSize = 30;
     const p = 20;
@@ -53,7 +55,7 @@ export const drawUI = ({
   };
 
   drawInfo([
-    `Velocity X: ${velocity.x.toFixed(0) * direction}`,
+    `Velocity X: ${(velocity.x * direction).toFixed(0)}`,
     `Velocity Y: ${velocity.y.toFixed(0)}`,
     `Angle: ${angle.toFixed(0)}`,
   ]);

@@ -1,5 +1,6 @@
-import { config } from '../config.js';
-import { getMultiple, getRandomInt } from '../utils.js';
+import { config } from '../config';
+import { Game } from '../types';
+import { getMultiple, getRandomInt } from '../utils';
 
 const {
   entities: { player },
@@ -9,7 +10,7 @@ const {
   },
 } = config;
 
-export const spawnBackground = game => {
+export const spawnBackground = (game: Game) => {
   const rowsCount = rows + 1;
   const colsCount = Math.ceil(width / cols.width);
   const rowHeight = height / rowsCount;
@@ -18,11 +19,6 @@ export const spawnBackground = game => {
   const hue = getRandomInt(0, 360);
 
   game.background = {
-    rowsCount,
-    colsCount,
-    rowHeight,
-    lightOffset,
-    parallaxRate,
     hue,
     layers: getMultiple(rowIndex => {
       const parallax = 1 - rowIndex * parallaxRate;
@@ -37,6 +33,7 @@ export const spawnBackground = game => {
           height: height - player.size + height * parallax,
           color,
           parallax,
+          columns: [],
         };
       }
 
@@ -47,6 +44,7 @@ export const spawnBackground = game => {
         width,
         height,
         parallax,
+        color,
         columns: getMultiple(colIndex => {
           const heightOffset = getRandomInt(-rowHeight * cols.ratio, rowHeight * cols.ratio);
 
@@ -58,7 +56,6 @@ export const spawnBackground = game => {
             y: rowIndex * rowHeight + heightOffset,
             width: cols.width + overMargin * 2,
             height: height - rowIndex * rowHeight - heightOffset,
-            color,
           };
         }, colsCount),
       };

@@ -1,5 +1,6 @@
-import { config } from '../config.js';
-import { collides } from '../utils.js';
+import { config } from '../config';
+import { Entity, Game, Npc } from '../types';
+import { collides } from '../utils';
 
 const {
   world: { gravity },
@@ -8,7 +9,7 @@ const {
   },
 } = config;
 
-const moveNpc = game => entity => {
+const moveNpc = (game: Game) => (entity: Npc) => {
   const {
     deltaTime,
     entities: { obstacles, player },
@@ -88,4 +89,4 @@ const moveNpc = game => entity => {
   }
 };
 
-export const moveNpcs = game => game.entities.npcs.forEach(moveNpc(game));
+export const moveNpcs = (game: Game) => game.entities.npcs.forEach(moveNpc(game));

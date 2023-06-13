@@ -1,5 +1,6 @@
-import { config } from '../config.js';
-import { collides, xor } from '../utils.js';
+import { config } from '../config';
+import { Game } from '../types';
+import { collides, xor } from '../utils';
 
 const {
   entities: {
@@ -8,7 +9,7 @@ const {
   world: { gravity, maxVelocity },
 } = config;
 
-export const movePlayer = game => {
+export const movePlayer = (game: Game) => {
   const {
     deltaTime,
     entities: { player, obstacles },

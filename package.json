@@ -11,7 +11,7 @@
   "scripts": {
     "start": "webpack serve --open --mode development",
     "build": "webpack --mode production",
-    "deploy": "firebase deploy"
+    "deploy": "npm run build && firebase deploy"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.5",

@@ -1,8 +1,9 @@
-import { config } from '../config.js';
+import { config } from '../config';
+import { Game } from '../types';
 
 const { position } = config.camera;
 
-export const moveCamera = game => {
+export const moveCamera = (game: Game) => {
   const {
     camera,
     entities: { player },
