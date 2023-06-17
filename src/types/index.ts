@@ -1,8 +1,17 @@
 export type Entity = {
-  x: number;
-  y: number;
+  position: { x: number; y: number };
   width: number;
   height: number;
+  color?: string;
+};
+
+export type GameObject = {
+  render?: (graphics: any) => void;
+  update?: (deltaTime: number) => void;
+};
+
+export type Scene = {
+  spawn: () => GameObject[];
 };
 
 export type GameCallback = (game: Game) => void;

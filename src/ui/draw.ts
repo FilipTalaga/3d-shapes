@@ -5,12 +5,21 @@ export const drawUI = ({
   camera,
   ui: { debug },
   entities: {
-    player: { x, y, width, height, jumps, jumpReady, velocity, direction, angle },
+    player: {
+      position: { x, y },
+      width,
+      height,
+      jumps,
+      jumpReady,
+      velocity,
+      direction,
+      angle,
+    },
   },
 }: Game) => {
   if (!debug.open) return;
 
-  const origin = { x: x - camera.x + width / 2, y: y - camera.y + height / 2 };
+  const origin = { x: x - camera.position.x + width / 2, y: y - camera.position.y + height / 2 };
 
   /* Player jump state */
   if (jumpReady && jumps > 0) {

@@ -1,5 +1,6 @@
 import { config } from '../config';
-import { Game } from '../types';
+import { spawnNpcs } from '../npc/spawn';
+import { createObstacle } from '../obstacle';
 import { getRandomInt, getMultiple } from '../utils';
 
 const { obstacles, world } = config;
@@ -12,34 +13,42 @@ const getMapWalls = () => {
   const { innerWidth, innerHeight } = window;
 
   const left = {
-    x: 0 - innerWidth,
-    y: 0 - innerHeight,
+    position: {
+      x: 0 - innerWidth,
+      y: 0 - innerHeight,
+    },
     width: innerWidth + size,
     height: innerHeight * 2 + height,
   };
 
   const right = {
-    x: width - size,
-    y: 0 - innerHeight,
+    position: {
+      x: width - size,
+      y: 0 - innerHeight,
+    },
     width: innerWidth + size,
     height: innerHeight * 2 + height,
   };
 
   const top = {
-    x: 0 - innerWidth,
-    y: 0 - innerHeight,
+    position: {
+      x: 0 - innerWidth,
+      y: 0 - innerHeight,
+    },
     width: innerWidth * 2 + width,
     height: innerHeight + size,
   };
 
   const bottom = {
-    x: 0 - innerWidth,
-    y: height - size,
+    position: {
+      x: 0 - innerWidth,
+      y: height - size,
+    },
     width: innerWidth * 2 + width,
     height: innerHeight + size,
   };
 
-  return [top, left, right, bottom].map(wall => ({ ...wall, color }));
+  return [top, left, right, bottom].map(wall => createObstacle({ ...wall, color }));
 };
 
 const getObstacle = (rows: number, cols: number, hue: number) => (index: number) => {
@@ -67,16 +76,18 @@ const getObstacle = (rows: number, cols: number, hue: number) => (index: number)
 
   const color = `hsl(${hue}, 70%, 50%)`;
 
-  return {
-    x,
-    y,
+  return createObstacle({
+    position: {
+      x,
+      y,
+    },
     width,
     height,
     color,
-  };
+  });
 };
 
-export const spawnObstacles = (game: Game) => {
+export const spawnObstacles = (gameHue: number) => {
   const { platforms } = obstacles;
   const { width, height } = world;
 
@@ -91,10 +102,25 @@ export const spawnObstacles = (game: Game) => {
   const cols = Math.round(numColumns);
 
   /* Background's complementary color */
-  const hue = (game.background.hue + 180) % 360;
+  const hue = (gameHue + 180) % 360;
 
-  game.entities.obstacles = [
-    ...getMapWalls(),
-    ...getMultiple(getObstacle(rows, cols, hue), rows * cols),
-  ];
+  return [...getMapWalls(), ...getMultiple(getObstacle(rows, cols, hue), rows * cols)];
+};
+
+export const makeCity = () => {
+  // const player = makePlayer()
+  // const camera = makeCamera()
+  // const background = makeBackground()
+  // const npcs = makeNpcs()
+
+  const spawn = () => {
+    const hue = getRandomInt(0, 360);
+
+    const obstacles = spawnObstacles(hue);
+    const npcs = spawnNpcs(hue);
+
+    return [...obstacles, ...npcs];
+  };
+
+  return { spawn };
 };

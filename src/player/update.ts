@@ -24,7 +24,7 @@ export const movePlayer = (game: Game) => {
   /*********************************************************/
   /* Move vertically                                       */
   /*********************************************************/
-  player.y += player.velocity.y * deltaTime;
+  player.position.y += player.velocity.y * deltaTime;
 
   /*********************************************************/
   /* Check obstacle collision                              */
@@ -33,11 +33,13 @@ export const movePlayer = (game: Game) => {
   obstacles
     .filter(obstacle => collides(player, obstacle))
     .forEach(obstacle => {
-      player.standing = player.y + player.height > obstacle.y && player.y < obstacle.y;
+      player.standing =
+        player.position.y + player.height > obstacle.position.y &&
+        player.position.y < obstacle.position.y;
 
-      player.y = player.standing
-        ? obstacle.y - player.height /* Collision from top */
-        : obstacle.y + obstacle.height; /* Collision from bottom */
+      player.position.y = player.standing
+        ? obstacle.position.y - player.height /* Collision from top */
+        : obstacle.position.y + obstacle.height; /* Collision from bottom */
 
       player.velocity.y = 0; /* Reset velocity on hit */
     });
@@ -109,7 +111,7 @@ export const movePlayer = (game: Game) => {
   /*********************************************************/
   /* Move horizontally                                     */
   /*********************************************************/
-  player.x += player.velocity.x * player.direction * deltaTime;
+  player.position.x += player.velocity.x * player.direction * deltaTime;
 
   /*********************************************************/
   /* Check obstacle collision                              */
@@ -118,9 +120,10 @@ export const movePlayer = (game: Game) => {
     .filter(obstacle => collides(player, obstacle))
     .forEach(obstacle => {
       /* Align position with the obstacle boundries */
-      player.x =
-        player.x + player.width > obstacle.x && player.x < obstacle.x
-          ? obstacle.x - player.width /* Collision from left */
-          : obstacle.x + obstacle.width; /* Collision from right */
+      player.position.x =
+        player.position.x + player.width > obstacle.position.x &&
+        player.position.x < obstacle.position.x
+          ? obstacle.position.x - player.width /* Collision from left */
+          : obstacle.position.x + obstacle.width; /* Collision from right */
     });
 };

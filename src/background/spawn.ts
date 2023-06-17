@@ -27,8 +27,10 @@ export const spawnBackground = (game: Game) => {
       /* Background */
       if (rowIndex === 0) {
         return {
-          x: 0,
-          y: 0,
+          position: {
+            x: 0,
+            y: 0,
+          },
           width,
           height: height - player.size + height * parallax,
           color,
@@ -39,8 +41,10 @@ export const spawnBackground = (game: Game) => {
 
       /* Layers */
       return {
-        x: 0,
-        y: 0,
+        position: {
+          x: 0,
+          y: 0,
+        },
         width,
         height,
         parallax,
@@ -52,8 +56,10 @@ export const spawnBackground = (game: Game) => {
           const overMargin = 1;
 
           return {
-            x: colIndex * cols.width - overMargin,
-            y: rowIndex * rowHeight + heightOffset,
+            position: {
+              x: colIndex * cols.width - overMargin,
+              y: rowIndex * rowHeight + heightOffset,
+            },
             width: cols.width + overMargin * 2,
             height: height - rowIndex * rowHeight - heightOffset,
           };

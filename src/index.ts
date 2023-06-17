@@ -1,16 +1,25 @@
-import { makeGame } from './engine';
-import { spawnPlayer, movePlayer, drawPlayer } from './player';
-import { spawnObstacles, drawObstacles } from './obstacle';
-import { spawnNpcs, moveNpcs, drawNpcs } from './npc';
-import { spawnCamera, moveCamera } from './camera';
-import { spawnBackground, moveBackground, drawBackground } from './background';
-import { spawnUI, updateUI, drawUI } from './ui';
+// import { spawnPlayer, movePlayer, drawPlayer } from './player';
+// import { spawnBackground, moveBackground, drawBackground } from './background';
+// import { spawnUI, updateUI, drawUI } from './ui';
+import { createGame } from './engine/game';
+import { makeCity } from './scenes/city';
 
-const spawners = [spawnBackground, spawnPlayer, spawnObstacles, spawnNpcs, spawnCamera, spawnUI];
-const updaters = [moveNpcs, movePlayer, moveBackground, moveCamera, updateUI];
-const renderers = [drawBackground, drawObstacles, drawNpcs, drawPlayer, drawUI];
+// const spawners = [spawnBackground, spawnPlayer, , spawnUI];
+// const updaters = [movePlayer, moveBackground, updateUI];
+// const renderers = [drawBackground, drawPlayer, drawUI];
 
-const game = makeGame(spawners, updaters, renderers);
+const game = createGame();
+
+const scene = {
+  spawn: () => {
+    const npc1 = game.createGameObject();
+    const npc2 = game.createGameObject();
+
+    return [npc1, npc2];
+  },
+};
+
+game.setScene(scene);
 
 window.addEventListener('load', game.start);
 window.addEventListener('unload', game.stop);

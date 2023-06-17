@@ -22,8 +22,10 @@ export const spawnPlayer = (game: Game) => {
   game.entities.player = {
     width,
     height,
-    x,
-    y,
+    position: {
+      x,
+      y,
+    },
     color,
     velocity,
     standing,

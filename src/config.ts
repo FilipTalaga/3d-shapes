@@ -1,7 +1,7 @@
 export const config = {
   world: {
-    width: 20_000,
-    height: 2000,
+    width: 1_500,
+    height: 1_000,
     gravity: 1600, // default: 1200
     maxVelocity: 3000,
   },
@@ -41,8 +41,8 @@ export const config = {
       size: 0,
     },
     platforms: {
-      padding: [800, 400, 200, 400],
-      count: { min: 60, max: 80 },
+      padding: [200, 200, 200, 200],
+      count: { min: 20, max: 30 },
       height: { min: 40, max: 40 },
     },
   },

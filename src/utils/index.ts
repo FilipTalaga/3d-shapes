@@ -1,4 +1,4 @@
-import { Entity } from './types';
+import { Entity } from '../types';
 
 export const getRandomInt = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -20,10 +20,10 @@ export const getMultiple = <T>(getter: (index: number, count: number) => T, coun
   new Array(count).fill(null).map((_, index) => getter(index, count));
 
 export const collides = (entity: Entity, obstacle: Entity) =>
-  entity.x < obstacle.x + obstacle.width &&
-  entity.x + entity.width > obstacle.x &&
-  entity.y < obstacle.y + obstacle.height &&
-  entity.y + entity.height > obstacle.y;
+  entity.position.x < obstacle.position.x + obstacle.width &&
+  entity.position.x + entity.width > obstacle.position.x &&
+  entity.position.y < obstacle.position.y + obstacle.height &&
+  entity.position.y + entity.height > obstacle.position.y;
 
 export const xor = (...conditions: boolean[]) =>
   !(conditions.every(Boolean) || !conditions.some(Boolean));

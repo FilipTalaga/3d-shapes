@@ -1,6 +1,6 @@
 import { getRandomInt, getMultiple } from '../utils';
 import { config } from '../config';
-import { Game } from '../types';
+import { createNpc } from '.';
 
 const {
   world,
@@ -14,9 +14,11 @@ const getNpc = (hue: number) => () => {
   const height = getRandomInt(width - width * size.ratio, width + width * size.ratio);
   const color = `hsl(${hue}, 80%, 80%)`;
 
-  return {
-    x: world.width / 2 - width / 2,
-    y: world.height * 0.2,
+  return createNpc({
+    position: {
+      x: world.width / 2 - width / 2,
+      y: world.height * 0.2,
+    },
     width,
     height,
     color,
@@ -25,13 +27,11 @@ const getNpc = (hue: number) => () => {
       y: getRandomInt(velocity.y.min, velocity.y.max),
     },
     direction: getRandomInt(0, 1) ? 1 : -1,
-  };
+  });
 };
 
-export const spawnNpcs = (game: Game) => {
+export const spawnNpcs = (gameHue: number) => {
   const total = getRandomInt(count.min, count.max);
 
-  const hue = game.background.hue;
-
-  game.entities.npcs = getMultiple(getNpc(hue), total);
+  return getMultiple(getNpc(gameHue), total);
 };
