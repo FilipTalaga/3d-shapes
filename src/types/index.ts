@@ -3,6 +3,69 @@ export type Entity = {
   y: number;
   width: number;
   height: number;
+  color?: string;
+};
+
+export type Vec2 = {
+  x: number;
+  y: number;
+};
+
+export type Size = {
+  width: number;
+  height: number;
+};
+
+export type VerletPos = {
+  old: Vec2;
+  current: Vec2;
+};
+
+export type Rect = {
+  type: 'rect';
+  size: Size;
+};
+
+export type Circle = {
+  type: 'circle';
+  radius: number;
+};
+
+export type Form = Rect | Circle;
+
+export type Shape = {
+  pos: VerletPos;
+  form: Form;
+};
+
+export type InitShape = Omit<Shape, 'pos'> & {
+  pos: Vec2;
+};
+
+export type Apperance = {
+  color: string;
+};
+
+export type Physics = {
+  type: 'dynamic' | 'static';
+  acc: Vec2;
+  mass: number;
+};
+
+export type GameObject = {
+  shape: Shape;
+  apperance?: Apperance;
+  physics?: Physics;
+};
+
+export type GameObjectInit = {
+  shape?: Partial<InitShape>;
+  apperance?: Partial<Apperance>;
+  physics?: Partial<Physics>;
+};
+
+export type Scene = {
+  spawn: () => GameObject[];
 };
 
 export type GameCallback = (game: Game) => void;

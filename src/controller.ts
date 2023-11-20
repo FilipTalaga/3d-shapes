@@ -1,11 +1,13 @@
-export const getController = () => {
+export const createController = () => {
   let controlsPressed: Record<string, boolean> = {};
 
-  const registerKey = ({ code }: KeyboardEvent) => {
+  const registerKey: EventListener = (event: Event) => {
+    const { code } = event as KeyboardEvent;
     controlsPressed[code] = true;
   };
 
-  const releaseKey = ({ code }: KeyboardEvent) => {
+  const releaseKey: EventListener = (event: Event) => {
+    const { code } = event as KeyboardEvent;
     controlsPressed[code] = false;
   };
 
